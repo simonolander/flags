@@ -1,271 +1,284 @@
-module Country exposing (..)
+module Country exposing
+    ( Country
+    , countries
+    , defaultCountry
+    , flagImage
+    )
 
-import List.Nonempty exposing (Nonempty, cons, fromElement)
 import String exposing (toLower)
 
+
 type alias Country =
-    { code :String,
-    name: String
+    { code : String
+    , name : String
     }
 
-countries : Nonempty Country
+
+defaultCountry : Country
+defaultCountry =
+    { code = "AD", name = "Andorra" }
+
+
+countries : List Country
 countries =
-    fromElement {code = "AD", name =  "Andorra" }
-        |> cons {code = "AE", name =  "United Arab Emirates" }
-        |> cons {code = "AF", name =  "Afghanistan" }
-        |> cons {code = "AG", name =  "Antigua and Barbuda" }
-        |> cons {code = "AI", name =  "Anguilla" }
-        |> cons {code = "AL", name =  "Albania" }
-        |> cons {code = "AM", name =  "Armenia" }
-        |> cons {code = "AN", name =  "Netherlands Antilles" }
-        |> cons {code = "AO", name =  "Angola" }
-        |> cons {code = "AQ", name =  "Antarctica" }
-        |> cons {code = "AR", name =  "Argentina" }
-        |> cons {code = "AS", name =  "American Samoa" }
-        |> cons {code = "AT", name =  "Austria" }
-        |> cons {code = "AU", name =  "Australia" }
-        |> cons {code = "AW", name =  "Aruba" }
-        |> cons {code = "AX", name =  "Åland Islands" }
-        |> cons {code = "AZ", name =  "Azerbaijan" }
-        |> cons {code = "BA", name =  "Bosnia and Herzegovina" }
-        |> cons {code = "BB", name =  "Barbados" }
-        |> cons {code = "BD", name =  "Bangladesh" }
-        |> cons {code = "BE", name =  "Belgium" }
-        |> cons {code = "BF", name =  "Burkina Faso" }
-        |> cons {code = "BG", name =  "Bulgaria" }
-        |> cons {code = "BH", name =  "Bahrain" }
-        |> cons {code = "BI", name =  "Burundi" }
-        |> cons {code = "BJ", name =  "Benin" }
-        |> cons {code = "BL", name =  "Saint Barthélemy" }
-        |> cons {code = "BM", name =  "Bermuda" }
-        |> cons {code = "BN", name =  "Brunei Darussalam" }
-        |> cons {code = "BO", name =  "Bolivia" }
-        |> cons {code = "BQ", name =  "Caribbean Netherlands" }
-        |> cons {code = "BR", name =  "Brazil" }
-        |> cons {code = "BS", name =  "Bahamas" }
-        |> cons {code = "BT", name =  "Bhutan" }
-        |> cons {code = "BV", name =  "Bouvet Island" }
-        |> cons {code = "BW", name =  "Botswana" }
-        |> cons {code = "BY", name =  "Belarus" }
-        |> cons {code = "BZ", name =  "Belize" }
-        |> cons {code = "CA", name =  "Canada" }
-        |> cons {code = "CC", name =  "Cocos (Keeling) Islands" }
-        |> cons {code = "CD", name =  "Democratic Republic of the Congo" }
-        |> cons {code = "CF", name =  "Central African Republic" }
-        |> cons {code = "CG", name =  "Congo" }
-        |> cons {code = "CH", name =  "Switzerland" }
-        |> cons {code = "CI", name =  "Côte d'Ivoire" }
-        |> cons {code = "CK", name =  "Cook Islands" }
-        |> cons {code = "CL", name =  "Chile" }
-        |> cons {code = "CM", name =  "Cameroon" }
-        |> cons {code = "CN", name =  "China" }
-        |> cons {code = "CO", name =  "Colombia" }
-        |> cons {code = "CR", name =  "Costa Rica" }
-        |> cons {code = "CU", name =  "Cuba" }
-        |> cons {code = "CV", name =  "Cape Verde" }
-        |> cons {code = "CW", name =  "Curaçao" }
-        |> cons {code = "CX", name =  "Christmas Island" }
-        |> cons {code = "CY", name =  "Cyprus" }
-        |> cons {code = "CZ", name =  "Czech Republic" }
-        |> cons {code = "DE", name =  "Germany" }
-        |> cons {code = "DJ", name =  "Djibouti" }
-        |> cons {code = "DK", name =  "Denmark" }
-        |> cons {code = "DM", name =  "Dominica" }
-        |> cons {code = "DO", name =  "Dominican Republic" }
-        |> cons {code = "DZ", name =  "Algeria" }
-        |> cons {code = "EC", name =  "Ecuador" }
-        |> cons {code = "EE", name =  "Estonia" }
-        |> cons {code = "EG", name =  "Egypt" }
-        |> cons {code = "EH", name =  "Western Sahara" }
-        |> cons {code = "ER", name =  "Eritrea" }
-        |> cons {code = "ES", name =  "Spain" }
-        |> cons {code = "ET", name =  "Ethiopia" }
-        |> cons {code = "EU", name =  "Europe" }
-        |> cons {code = "FI", name =  "Finland" }
-        |> cons {code = "FJ", name =  "Fiji" }
-        |> cons {code = "FK", name =  "Falkland Islands (Malvinas)" }
-        |> cons {code = "FM", name =  "Micronesia, Federated States of" }
-        |> cons {code = "FO", name =  "Faroe Islands" }
-        |> cons {code = "FR", name =  "France" }
-        |> cons {code = "GA", name =  "Gabon" }
-        |> cons {code = "GB-ENG", name = "England" }
-        |> cons {code = "GB-NIR", name = "Northern Ireland" }
-        |> cons {code = "GB-SCT", name = "Scotland" }
-        |> cons {code = "GB-WLS", name = "Wales" }
-        |> cons {code = "GB", name =  "United Kingdom" }
-        |> cons {code = "GD", name =  "Grenada" }
-        |> cons {code = "GE", name =  "Georgia" }
-        |> cons {code = "GF", name =  "French Guiana" }
-        |> cons {code = "GG", name =  "Guernsey" }
-        |> cons {code = "GH", name =  "Ghana" }
-        |> cons {code = "GI", name =  "Gibraltar" }
-        |> cons {code = "GL", name =  "Greenland" }
-        |> cons {code = "GM", name =  "Gambia" }
-        |> cons {code = "GN", name =  "Guinea" }
-        |> cons {code = "GP", name =  "Guadeloupe" }
-        |> cons {code = "GQ", name =  "Equatorial Guinea" }
-        |> cons {code = "GR", name =  "Greece" }
-        |> cons {code = "GS", name =  "South Georgia and the South Sandwich Islands" }
-        |> cons {code = "GT", name =  "Guatemala" }
-        |> cons {code = "GU", name =  "Guam" }
-        |> cons {code = "GW", name =  "Guinea-Bissau" }
-        |> cons {code = "GY", name =  "Guyana" }
-        |> cons {code = "HK", name =  "Hong Kong" }
-        |> cons {code = "HM", name =  "Heard Island and McDonald Islands" }
-        |> cons {code = "HN", name =  "Honduras" }
-        |> cons {code = "HR", name =  "Croatia" }
-        |> cons {code = "HT", name =  "Haiti" }
-        |> cons {code = "HU", name =  "Hungary" }
-        |> cons {code = "ID", name =  "Indonesia" }
-        |> cons {code = "IE", name =  "Ireland" }
-        |> cons {code = "IL", name =  "Israel" }
-        |> cons {code = "IM", name =  "Isle of Man" }
-        |> cons {code = "IN", name =  "India" }
-        |> cons {code = "IO", name =  "British Indian Ocean Territory" }
-        |> cons {code = "IQ", name =  "Iraq" }
-        |> cons {code = "IR", name =  "Iran, Islamic Republic of" }
-        |> cons {code = "IS", name =  "Iceland" }
-        |> cons {code = "IT", name =  "Italy" }
-        |> cons {code = "JE", name =  "Jersey" }
-        |> cons {code = "JM", name =  "Jamaica" }
-        |> cons {code = "JO", name =  "Jordan" }
-        |> cons {code = "JP", name =  "Japan" }
-        |> cons {code = "KE", name =  "Kenya" }
-        |> cons {code = "KG", name =  "Kyrgyzstan" }
-        |> cons {code = "KH", name =  "Cambodia" }
-        |> cons {code = "KI", name =  "Kiribati" }
-        |> cons {code = "KM", name =  "Comoros" }
-        |> cons {code = "KN", name =  "Saint Kitts and Nevis" }
-        |> cons {code = "KP", name =  "Korea, Democratic People's Republic of" }
-        |> cons {code = "KR", name =  "Korea, Republic of" }
-        |> cons {code = "KW", name =  "Kuwait" }
-        |> cons {code = "KY", name =  "Cayman Islands" }
-        |> cons {code = "KZ", name =  "Kazakhstan" }
-        |> cons {code = "LA", name =  "Lao People's Democratic Republic" }
-        |> cons {code = "LB", name =  "Lebanon" }
-        |> cons {code = "LC", name =  "Saint Lucia" }
-        |> cons {code = "LI", name =  "Liechtenstein" }
-        |> cons {code = "LK", name =  "Sri Lanka" }
-        |> cons {code = "LR", name =  "Liberia" }
-        |> cons {code = "LS", name =  "Lesotho" }
-        |> cons {code = "LT", name =  "Lithuania" }
-        |> cons {code = "LU", name =  "Luxembourg" }
-        |> cons {code = "LV", name =  "Latvia" }
-        |> cons {code = "LY", name =  "Libya" }
-        |> cons {code = "MA", name =  "Morocco" }
-        |> cons {code = "MC", name =  "Monaco" }
-        |> cons {code = "MD", name =  "Moldova" }
-        |> cons {code = "ME", name =  "Montenegro" }
-        |> cons {code = "MF", name =  "Saint Martin" }
-        |> cons {code = "MG", name =  "Madagascar" }
-        |> cons {code = "MH", name =  "Marshall Islands" }
-        |> cons {code = "MK", name =  "North Macedonia" }
-        |> cons {code = "ML", name =  "Mali" }
-        |> cons {code = "MM", name =  "Myanmar" }
-        |> cons {code = "MN", name =  "Mongolia" }
-        |> cons {code = "MO", name =  "Macao" }
-        |> cons {code = "MP", name =  "Northern Mariana Islands" }
-        |> cons {code = "MQ", name =  "Martinique" }
-        |> cons {code = "MR", name =  "Mauritania" }
-        |> cons {code = "MS", name =  "Montserrat" }
-        |> cons {code = "MT", name =  "Malta" }
-        |> cons {code = "MU", name =  "Mauritius" }
-        |> cons {code = "MV", name =  "Maldives" }
-        |> cons {code = "MW", name =  "Malawi" }
-        |> cons {code = "MX", name =  "Mexico" }
-        |> cons {code = "MY", name =  "Malaysia" }
-        |> cons {code = "MZ", name =  "Mozambique" }
-        |> cons {code = "NA", name =  "Namibia" }
-        |> cons {code = "NC", name =  "New Caledonia" }
-        |> cons {code = "NE", name =  "Niger" }
-        |> cons {code = "NF", name =  "Norfolk Island" }
-        |> cons {code = "NG", name =  "Nigeria" }
-        |> cons {code = "NI", name =  "Nicaragua" }
-        |> cons {code = "NL", name =  "Netherlands" }
-        |> cons {code = "NO", name =  "Norway" }
-        |> cons {code = "NP", name =  "Nepal" }
-        |> cons {code = "NR", name =  "Nauru" }
-        |> cons {code = "NU", name =  "Niue" }
-        |> cons {code = "NZ", name =  "New Zealand" }
-        |> cons {code = "OM", name =  "Oman" }
-        |> cons {code = "PA", name =  "Panama" }
-        |> cons {code = "PE", name =  "Peru" }
-        |> cons {code = "PF", name =  "French Polynesia" }
-        |> cons {code = "PG", name =  "Papua New Guinea" }
-        |> cons {code = "PH", name =  "Philippines" }
-        |> cons {code = "PK", name =  "Pakistan" }
-        |> cons {code = "PL", name =  "Poland" }
-        |> cons {code = "PM", name =  "Saint Pierre and Miquelon" }
-        |> cons {code = "PN", name =  "Pitcairn" }
-        |> cons {code = "PR", name =  "Puerto Rico" }
-        |> cons {code = "PS", name =  "Palestine" }
-        |> cons {code = "PT", name =  "Portugal" }
-        |> cons {code = "PW", name =  "Palau" }
-        |> cons {code = "PY", name =  "Paraguay" }
-        |> cons {code = "QA", name =  "Qatar" }
-        |> cons {code = "RE", name =  "Réunion" }
-        |> cons {code = "RO", name =  "Romania" }
-        |> cons {code = "RS", name =  "Serbia" }
-        |> cons {code = "RU", name =  "Russian Federation" }
-        |> cons {code = "RW", name =  "Rwanda" }
-        |> cons {code = "SA", name =  "Saudi Arabia" }
-        |> cons {code = "SB", name =  "Solomon Islands" }
-        |> cons {code = "SC", name =  "Seychelles" }
-        |> cons {code = "SD", name =  "Sudan" }
-        |> cons {code = "SE", name =  "Sweden" }
-        |> cons {code = "SG", name =  "Singapore" }
-        |> cons {code = "SH", name =  "Saint Helena" }
-        |> cons {code = "SI", name =  "Slovenia" }
-        |> cons {code = "SJ", name =  "Svalbard and Jan Mayen Islands" }
-        |> cons {code = "SK", name =  "Slovakia" }
-        |> cons {code = "SL", name =  "Sierra Leone" }
-        |> cons {code = "SM", name =  "San Marino" }
-        |> cons {code = "SN", name =  "Senegal" }
-        |> cons {code = "SO", name =  "Somalia" }
-        |> cons {code = "SR", name =  "Suriname" }
-        |> cons {code = "SS", name =  "South Sudan" }
-        |> cons {code = "ST", name =  "Sao Tome and Principe" }
-        |> cons {code = "SV", name =  "El Salvador" }
-        |> cons {code = "SX", name =  "Sint Maarten (Dutch part)" }
-        |> cons {code = "SY", name =  "Syrian Arab Republic" }
-        |> cons {code = "SZ", name =  "Swaziland" }
-        |> cons {code = "TC", name =  "Turks and Caicos Islands" }
-        |> cons {code = "TD", name =  "Chad" }
-        |> cons {code = "TF", name =  "French Southern Territories" }
-        |> cons {code = "TG", name =  "Togo" }
-        |> cons {code = "TH", name =  "Thailand" }
-        |> cons {code = "TJ", name =  "Tajikistan" }
-        |> cons {code = "TK", name =  "Tokelau" }
-        |> cons {code = "TL", name =  "Timor-Leste" }
-        |> cons {code = "TM", name =  "Turkmenistan" }
-        |> cons {code = "TN", name =  "Tunisia" }
-        |> cons {code = "TO", name =  "Tonga" }
-        |> cons {code = "TR", name =  "Turkey" }
-        |> cons {code = "TT", name =  "Trinidad and Tobago" }
-        |> cons {code = "TV", name =  "Tuvalu" }
-        |> cons {code = "TW", name =  "Taiwan" }
-        |> cons {code = "TZ", name =  "Tanzania" }
-        |> cons {code = "UA", name =  "Ukraine" }
-        |> cons {code = "UG", name =  "Uganda" }
-        |> cons {code = "US", name =  "United States" }
-        |> cons {code = "UY", name =  "Uruguay" }
-        |> cons {code = "UZ", name =  "Uzbekistan" }
-        |> cons {code = "VA", name =  "Holy See (Vatican City State)" }
-        |> cons {code = "VC", name =  "Saint Vincent and the Grenadines" }
-        |> cons {code = "VE", name =  "Venezuela" }
-        |> cons {code = "VG", name =  "Virgin Islands, British" }
-        |> cons {code = "VI", name =  "Virgin Islands, U.S." }
-        |> cons {code = "VN", name =  "Viet Nam" }
-        |> cons {code = "VU", name =  "Vanuatu" }
-        |> cons {code = "WF", name =  "Wallis and Futuna Islands" }
-        |> cons {code = "XK", name =  "Kosovo" }
-        |> cons {code = "WS", name =  "Samoa" }
-        |> cons {code = "YE", name =  "Yemen" }
-        |> cons {code = "YT", name =  "Mayotte" }
-        |> cons {code = "ZA", name =  "South Africa" }
-        |> cons {code = "ZM", name =  "Zambia" }
-        |> cons {code = "ZW", name =  "Zimbabwe" }
+    [ { code = "AD", name = "Andorra" }
+    , { code = "AE", name = "United Arab Emirates" }
+    , { code = "AF", name = "Afghanistan" }
+    , { code = "AG", name = "Antigua and Barbuda" }
+    , { code = "AI", name = "Anguilla" }
+    , { code = "AL", name = "Albania" }
+    , { code = "AM", name = "Armenia" }
+    , { code = "AN", name = "Netherlands Antilles" }
+    , { code = "AO", name = "Angola" }
+    , { code = "AQ", name = "Antarctica" }
+    , { code = "AR", name = "Argentina" }
+    , { code = "AS", name = "American Samoa" }
+    , { code = "AT", name = "Austria" }
+    , { code = "AU", name = "Australia" }
+    , { code = "AW", name = "Aruba" }
+    , { code = "AX", name = "Åland Islands" }
+    , { code = "AZ", name = "Azerbaijan" }
+    , { code = "BA", name = "Bosnia and Herzegovina" }
+    , { code = "BB", name = "Barbados" }
+    , { code = "BD", name = "Bangladesh" }
+    , { code = "BE", name = "Belgium" }
+    , { code = "BF", name = "Burkina Faso" }
+    , { code = "BG", name = "Bulgaria" }
+    , { code = "BH", name = "Bahrain" }
+    , { code = "BI", name = "Burundi" }
+    , { code = "BJ", name = "Benin" }
+    , { code = "BL", name = "Saint Barthélemy" }
+    , { code = "BM", name = "Bermuda" }
+    , { code = "BN", name = "Brunei Darussalam" }
+    , { code = "BO", name = "Bolivia" }
+    , { code = "BQ", name = "Caribbean Netherlands" }
+    , { code = "BR", name = "Brazil" }
+    , { code = "BS", name = "Bahamas" }
+    , { code = "BT", name = "Bhutan" }
+    , { code = "BV", name = "Bouvet Island" }
+    , { code = "BW", name = "Botswana" }
+    , { code = "BY", name = "Belarus" }
+    , { code = "BZ", name = "Belize" }
+    , { code = "CA", name = "Canada" }
+    , { code = "CC", name = "Cocos (Keeling) Islands" }
+    , { code = "CD", name = "Democratic Republic of the Congo" }
+    , { code = "CF", name = "Central African Republic" }
+    , { code = "CG", name = "Congo" }
+    , { code = "CH", name = "Switzerland" }
+    , { code = "CI", name = "Côte d'Ivoire" }
+    , { code = "CK", name = "Cook Islands" }
+    , { code = "CL", name = "Chile" }
+    , { code = "CM", name = "Cameroon" }
+    , { code = "CN", name = "China" }
+    , { code = "CO", name = "Colombia" }
+    , { code = "CR", name = "Costa Rica" }
+    , { code = "CU", name = "Cuba" }
+    , { code = "CV", name = "Cape Verde" }
+    , { code = "CW", name = "Curaçao" }
+    , { code = "CX", name = "Christmas Island" }
+    , { code = "CY", name = "Cyprus" }
+    , { code = "CZ", name = "Czech Republic" }
+    , { code = "DE", name = "Germany" }
+    , { code = "DJ", name = "Djibouti" }
+    , { code = "DK", name = "Denmark" }
+    , { code = "DM", name = "Dominica" }
+    , { code = "DO", name = "Dominican Republic" }
+    , { code = "DZ", name = "Algeria" }
+    , { code = "EC", name = "Ecuador" }
+    , { code = "EE", name = "Estonia" }
+    , { code = "EG", name = "Egypt" }
+    , { code = "EH", name = "Western Sahara" }
+    , { code = "ER", name = "Eritrea" }
+    , { code = "ES", name = "Spain" }
+    , { code = "ET", name = "Ethiopia" }
+    , { code = "EU", name = "Europe" }
+    , { code = "FI", name = "Finland" }
+    , { code = "FJ", name = "Fiji" }
+    , { code = "FK", name = "Falkland Islands (Malvinas)" }
+    , { code = "FM", name = "Micronesia, Federated States of" }
+    , { code = "FO", name = "Faroe Islands" }
+    , { code = "FR", name = "France" }
+    , { code = "GA", name = "Gabon" }
+    , { code = "GB-ENG", name = "England" }
+    , { code = "GB-NIR", name = "Northern Ireland" }
+    , { code = "GB-SCT", name = "Scotland" }
+    , { code = "GB-WLS", name = "Wales" }
+    , { code = "GB", name = "United Kingdom" }
+    , { code = "GD", name = "Grenada" }
+    , { code = "GE", name = "Georgia" }
+    , { code = "GF", name = "French Guiana" }
+    , { code = "GG", name = "Guernsey" }
+    , { code = "GH", name = "Ghana" }
+    , { code = "GI", name = "Gibraltar" }
+    , { code = "GL", name = "Greenland" }
+    , { code = "GM", name = "Gambia" }
+    , { code = "GN", name = "Guinea" }
+    , { code = "GP", name = "Guadeloupe" }
+    , { code = "GQ", name = "Equatorial Guinea" }
+    , { code = "GR", name = "Greece" }
+    , { code = "GS", name = "South Georgia and the South Sandwich Islands" }
+    , { code = "GT", name = "Guatemala" }
+    , { code = "GU", name = "Guam" }
+    , { code = "GW", name = "Guinea-Bissau" }
+    , { code = "GY", name = "Guyana" }
+    , { code = "HK", name = "Hong Kong" }
+    , { code = "HM", name = "Heard Island and McDonald Islands" }
+    , { code = "HN", name = "Honduras" }
+    , { code = "HR", name = "Croatia" }
+    , { code = "HT", name = "Haiti" }
+    , { code = "HU", name = "Hungary" }
+    , { code = "ID", name = "Indonesia" }
+    , { code = "IE", name = "Ireland" }
+    , { code = "IL", name = "Israel" }
+    , { code = "IM", name = "Isle of Man" }
+    , { code = "IN", name = "India" }
+    , { code = "IO", name = "British Indian Ocean Territory" }
+    , { code = "IQ", name = "Iraq" }
+    , { code = "IR", name = "Iran, Islamic Republic of" }
+    , { code = "IS", name = "Iceland" }
+    , { code = "IT", name = "Italy" }
+    , { code = "JE", name = "Jersey" }
+    , { code = "JM", name = "Jamaica" }
+    , { code = "JO", name = "Jordan" }
+    , { code = "JP", name = "Japan" }
+    , { code = "KE", name = "Kenya" }
+    , { code = "KG", name = "Kyrgyzstan" }
+    , { code = "KH", name = "Cambodia" }
+    , { code = "KI", name = "Kiribati" }
+    , { code = "KM", name = "Comoros" }
+    , { code = "KN", name = "Saint Kitts and Nevis" }
+    , { code = "KP", name = "Korea, Democratic People's Republic of" }
+    , { code = "KR", name = "Korea, Republic of" }
+    , { code = "KW", name = "Kuwait" }
+    , { code = "KY", name = "Cayman Islands" }
+    , { code = "KZ", name = "Kazakhstan" }
+    , { code = "LA", name = "Lao People's Democratic Republic" }
+    , { code = "LB", name = "Lebanon" }
+    , { code = "LC", name = "Saint Lucia" }
+    , { code = "LI", name = "Liechtenstein" }
+    , { code = "LK", name = "Sri Lanka" }
+    , { code = "LR", name = "Liberia" }
+    , { code = "LS", name = "Lesotho" }
+    , { code = "LT", name = "Lithuania" }
+    , { code = "LU", name = "Luxembourg" }
+    , { code = "LV", name = "Latvia" }
+    , { code = "LY", name = "Libya" }
+    , { code = "MA", name = "Morocco" }
+    , { code = "MC", name = "Monaco" }
+    , { code = "MD", name = "Moldova" }
+    , { code = "ME", name = "Montenegro" }
+    , { code = "MF", name = "Saint Martin" }
+    , { code = "MG", name = "Madagascar" }
+    , { code = "MH", name = "Marshall Islands" }
+    , { code = "MK", name = "North Macedonia" }
+    , { code = "ML", name = "Mali" }
+    , { code = "MM", name = "Myanmar" }
+    , { code = "MN", name = "Mongolia" }
+    , { code = "MO", name = "Macao" }
+    , { code = "MP", name = "Northern Mariana Islands" }
+    , { code = "MQ", name = "Martinique" }
+    , { code = "MR", name = "Mauritania" }
+    , { code = "MS", name = "Montserrat" }
+    , { code = "MT", name = "Malta" }
+    , { code = "MU", name = "Mauritius" }
+    , { code = "MV", name = "Maldives" }
+    , { code = "MW", name = "Malawi" }
+    , { code = "MX", name = "Mexico" }
+    , { code = "MY", name = "Malaysia" }
+    , { code = "MZ", name = "Mozambique" }
+    , { code = "NA", name = "Namibia" }
+    , { code = "NC", name = "New Caledonia" }
+    , { code = "NE", name = "Niger" }
+    , { code = "NF", name = "Norfolk Island" }
+    , { code = "NG", name = "Nigeria" }
+    , { code = "NI", name = "Nicaragua" }
+    , { code = "NL", name = "Netherlands" }
+    , { code = "NO", name = "Norway" }
+    , { code = "NP", name = "Nepal" }
+    , { code = "NR", name = "Nauru" }
+    , { code = "NU", name = "Niue" }
+    , { code = "NZ", name = "New Zealand" }
+    , { code = "OM", name = "Oman" }
+    , { code = "PA", name = "Panama" }
+    , { code = "PE", name = "Peru" }
+    , { code = "PF", name = "French Polynesia" }
+    , { code = "PG", name = "Papua New Guinea" }
+    , { code = "PH", name = "Philippines" }
+    , { code = "PK", name = "Pakistan" }
+    , { code = "PL", name = "Poland" }
+    , { code = "PM", name = "Saint Pierre and Miquelon" }
+    , { code = "PN", name = "Pitcairn" }
+    , { code = "PR", name = "Puerto Rico" }
+    , { code = "PS", name = "Palestine" }
+    , { code = "PT", name = "Portugal" }
+    , { code = "PW", name = "Palau" }
+    , { code = "PY", name = "Paraguay" }
+    , { code = "QA", name = "Qatar" }
+    , { code = "RE", name = "Réunion" }
+    , { code = "RO", name = "Romania" }
+    , { code = "RS", name = "Serbia" }
+    , { code = "RU", name = "Russian Federation" }
+    , { code = "RW", name = "Rwanda" }
+    , { code = "SA", name = "Saudi Arabia" }
+    , { code = "SB", name = "Solomon Islands" }
+    , { code = "SC", name = "Seychelles" }
+    , { code = "SD", name = "Sudan" }
+    , { code = "SE", name = "Sweden" }
+    , { code = "SG", name = "Singapore" }
+    , { code = "SH", name = "Saint Helena" }
+    , { code = "SI", name = "Slovenia" }
+    , { code = "SJ", name = "Svalbard and Jan Mayen Islands" }
+    , { code = "SK", name = "Slovakia" }
+    , { code = "SL", name = "Sierra Leone" }
+    , { code = "SM", name = "San Marino" }
+    , { code = "SN", name = "Senegal" }
+    , { code = "SO", name = "Somalia" }
+    , { code = "SR", name = "Suriname" }
+    , { code = "SS", name = "South Sudan" }
+    , { code = "ST", name = "Sao Tome and Principe" }
+    , { code = "SV", name = "El Salvador" }
+    , { code = "SX", name = "Sint Maarten (Dutch part)" }
+    , { code = "SY", name = "Syrian Arab Republic" }
+    , { code = "SZ", name = "Swaziland" }
+    , { code = "TC", name = "Turks and Caicos Islands" }
+    , { code = "TD", name = "Chad" }
+    , { code = "TF", name = "French Southern Territories" }
+    , { code = "TG", name = "Togo" }
+    , { code = "TH", name = "Thailand" }
+    , { code = "TJ", name = "Tajikistan" }
+    , { code = "TK", name = "Tokelau" }
+    , { code = "TL", name = "Timor-Leste" }
+    , { code = "TM", name = "Turkmenistan" }
+    , { code = "TN", name = "Tunisia" }
+    , { code = "TO", name = "Tonga" }
+    , { code = "TR", name = "Turkey" }
+    , { code = "TT", name = "Trinidad and Tobago" }
+    , { code = "TV", name = "Tuvalu" }
+    , { code = "TW", name = "Taiwan" }
+    , { code = "TZ", name = "Tanzania" }
+    , { code = "UA", name = "Ukraine" }
+    , { code = "UG", name = "Uganda" }
+    , { code = "US", name = "United States" }
+    , { code = "UY", name = "Uruguay" }
+    , { code = "UZ", name = "Uzbekistan" }
+    , { code = "VA", name = "Holy See (Vatican City State)" }
+    , { code = "VC", name = "Saint Vincent and the Grenadines" }
+    , { code = "VE", name = "Venezuela" }
+    , { code = "VG", name = "Virgin Islands, British" }
+    , { code = "VI", name = "Virgin Islands, U.S." }
+    , { code = "VN", name = "Viet Nam" }
+    , { code = "VU", name = "Vanuatu" }
+    , { code = "WF", name = "Wallis and Futuna Islands" }
+    , { code = "XK", name = "Kosovo" }
+    , { code = "WS", name = "Samoa" }
+    , { code = "YE", name = "Yemen" }
+    , { code = "YT", name = "Mayotte" }
+    , { code = "ZA", name = "South Africa" }
+    , { code = "ZM", name = "Zambia" }
+    , { code = "ZW", name = "Zimbabwe" }
+    ]
+
 
 flagImage : Country -> String
 flagImage country =
-    "/country-flags/" ++ (toLower country.code) ++ ".svg"
+    "/country-flags/" ++ toLower country.code ++ ".svg"

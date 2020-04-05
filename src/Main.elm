@@ -1,11 +1,11 @@
 module Main exposing (InitArgs, Model, Msg(..), init, main, update, view)
 
 import Browser
-import Country exposing (Country, countries, defaultCountry, flagImage)
-import Element exposing (centerX, column, el, fill, height, image, layout, maximum, padding, paragraph, rgb, rgb255, shrink, spacing, text, width)
+import Country exposing (Country, countries, defaultCountry, flagImage, similarFlags)
+import Element exposing (centerX, column, el, fill, height, image, layout, maximum, padding, paragraph, rgb255, shrink, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
-import Element.Font as Font exposing (color)
+import Element.Font as Font
 import Element.Input exposing (button, labelAbove, option, radio)
 import Html exposing (Html)
 import List.Selection as Selection exposing (Selection)
@@ -79,7 +79,11 @@ update msg model =
             )
 
         ClickedNewGame ->
-            ( { model | question = Nothing }, Random.generate GeneratedQuestion questionGenerator )
+            ( { model
+                | question = Nothing
+              }
+            , Random.generate GeneratedQuestion questionGenerator
+            )
 
         GeneratedQuestion question ->
             ( { model
@@ -97,14 +101,27 @@ questionGenerator =
         |> Random.map (List.take 4)
         |> Random.andThen
             (\selection ->
+                let
+                    default =
+                        List.head selection
+                            |> Maybe.withDefault defaultCountry
+                in
                 selection
-                    |> Random.uniform defaultCountry
+                    |> Random.uniform default
                     |> Random.map (Tuple.pair selection)
             )
         |> Random.map
             (\( selection, country ) ->
                 { correct = country
-                , selection = Selection.fromList selection
+                , selection =
+                    selection
+                        |> List.filter
+                            (\c ->
+                                similarFlags country
+                                    |> List.member c
+                                    |> not
+                            )
+                        |> Selection.fromList
                 }
             )
 
@@ -151,24 +168,50 @@ view model =
                     , viewFlag question.correct
                     , case model.answer of
                         Just answer ->
-                            column [ spacing 20 ]
+                            column
+                                [ spacing 20
+                                , centerX
+                                ]
                                 [ if answer == question.correct then
-                                    paragraph []
-                                        [ text answer.name
-                                        , text " is "
-                                        , el [ color <| rgb255 0 128 0 ] <| text "correct"
-                                        , text "!"
+                                    column
+                                        [ padding 20
+                                        , spacing 20
+                                        ]
+                                    <|
+                                        [ el
+                                            [ centerX
+                                            , Font.size 30
+                                            , Font.color <| rgb255 0 128 0
+                                            ]
+                                          <|
+                                            text "Correct"
+                                        , paragraph []
+                                            [ text "This is the flag of "
+                                            , el [ Font.bold ] <| text answer.name
+                                            , text "."
+                                            ]
                                         ]
 
                                   else
-                                    paragraph []
-                                        [ text answer.name
-                                        , text " is "
-                                        , el [ color <| rgb255 255 0 0 ] <| text "incorrect"
-                                        , text "! "
-                                        , text "The correct answer was "
-                                        , el [ Font.bold ] <| text question.correct.name
-                                        , text "."
+                                    column
+                                        [ padding 20
+                                        , spacing 20
+                                        ]
+                                    <|
+                                        [ el
+                                            [ centerX
+                                            , Font.size 30
+                                            , Font.color <| rgb255 200 0 0
+                                            ]
+                                          <|
+                                            text "Incorrect"
+                                        , paragraph []
+                                            [ text "You answered "
+                                            , el [ Font.bold ] <| text answer.name
+                                            , text ", but this is the flag of "
+                                            , el [ Font.bold ] <| text question.correct.name
+                                            , text "."
+                                            ]
                                         ]
                                 , button
                                     buttonAttributes

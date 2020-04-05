@@ -2,7 +2,7 @@ module Main exposing (InitArgs, Model, Msg(..), init, main, update, view)
 
 import Browser
 import Country exposing (Country, countries, defaultCountry, flagImage, similarFlags)
-import Element exposing (centerX, column, el, fill, height, image, layout, maximum, padding, paragraph, rgb255, shrink, spacing, text, width)
+import Element exposing (centerX, column, el, fill, height, image, layout, maximum, mouseOver, padding, paragraph, rgb255, shrink, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -21,6 +21,8 @@ import Random.List
 type alias Model =
     { question : Maybe Question
     , answer : Maybe Country
+    , correctAnswers : Int
+    , totalAnswers : Int
     }
 
 
@@ -39,6 +41,8 @@ init : InitArgs -> ( Model, Cmd Msg )
 init _ =
     ( { question = Nothing
       , answer = Nothing
+      , correctAnswers = 0
+      , totalAnswers = 0
       }
     , Random.generate GeneratedQuestion questionGenerator
     )
@@ -69,14 +73,29 @@ update msg model =
                     ( model, Cmd.none )
 
         ClickedAnswer ->
-            ( { model
-                | answer =
-                    model.question
-                        |> Maybe.map .selection
-                        |> Maybe.andThen Selection.selected
-              }
-            , Cmd.none
-            )
+            case model.question of
+                Just question ->
+                    case Selection.selected question.selection of
+                        Just selected ->
+                            ( { model
+                                | answer = Just selected
+                                , correctAnswers =
+                                    if question.correct == selected then
+                                        model.correctAnswers + 1
+
+                                    else
+                                        model.correctAnswers
+                                , totalAnswers =
+                                    model.totalAnswers + 1
+                              }
+                            , Cmd.none
+                            )
+
+                        Nothing ->
+                            ( model, Cmd.none )
+
+                Nothing ->
+                    ( model, Cmd.none )
 
         ClickedNewGame ->
             ( { model
@@ -146,8 +165,10 @@ view model =
             [ width fill
             , Border.width 1
             , padding 20
-            , Border.rounded 10
+            , Border.rounded 5
             , Background.color <| rgb255 255 255 255
+            , mouseOver
+                [ Background.color <| rgb255 220 220 220 ]
             ]
     in
     layout [] <|
@@ -164,24 +185,33 @@ view model =
                     , Background.color (rgb255 245 245 245)
                     , height fill
                     ]
-                    [ el [ centerX, Font.size 42, padding 20 ] (text "Vexillology")
+                    [ el
+                        [ centerX
+                        , Font.size 42
+                        , padding 20
+                        , Font.variant Font.smallCaps
+                        ]
+                        (text "Vexillology")
                     , viewFlag question.correct
                     , case model.answer of
                         Just answer ->
                             column
                                 [ spacing 20
                                 , centerX
+                                , width fill
                                 ]
                                 [ if answer == question.correct then
                                     column
                                         [ padding 20
                                         , spacing 20
+                                        , centerX
                                         ]
                                     <|
                                         [ el
                                             [ centerX
                                             , Font.size 30
                                             , Font.color <| rgb255 0 128 0
+                                            , Font.variant Font.smallCaps
                                             ]
                                           <|
                                             text "Correct"
@@ -196,12 +226,14 @@ view model =
                                     column
                                         [ padding 20
                                         , spacing 20
+                                        , centerX
                                         ]
                                     <|
                                         [ el
                                             [ centerX
                                             , Font.size 30
                                             , Font.color <| rgb255 200 0 0
+                                            , Font.variant Font.smallCaps
                                             ]
                                           <|
                                             text "Incorrect"
@@ -223,9 +255,12 @@ view model =
                         Nothing ->
                             column
                                 [ spacing 20
-                                , centerX
+                                , width fill
                                 ]
-                                [ radio [ spacing 10 ]
+                                [ radio
+                                    [ spacing 10
+                                    , centerX
+                                    ]
                                     { onChange = SelectCountry
                                     , options =
                                         question.selection
@@ -234,8 +269,8 @@ view model =
                                     , selected =
                                         Selection.selected question.selection
                                     , label =
-                                        labelAbove [ padding 20 ] <|
-                                            text "Which country has this flag? "
+                                        labelAbove [ centerX, padding 20 ] <|
+                                            paragraph [] [ text "Which country has this flag?" ]
                                     }
                                 , button
                                     buttonAttributes
@@ -250,6 +285,16 @@ view model =
                                             Nothing
                                     , label = text "Answer"
                                     }
+                                ]
+                    , el
+                        [ centerX
+                        ]
+                      <|
+                        text <|
+                            String.concat
+                                [ String.fromInt model.correctAnswers
+                                , " / "
+                                , String.fromInt model.totalAnswers
                                 ]
                     ]
 

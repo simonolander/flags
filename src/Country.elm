@@ -1570,6 +1570,7 @@ similarFlags country =
             , [ netherlands, caribbeanNetherlands ]
             , [ unitedKingdom, northernIreland, saintHelena ]
             , [ monaco, indonesia ]
+            , [ chad, romania ]
             ]
     in
     similar

@@ -185,13 +185,13 @@ view model =
                     , Background.color (rgb255 245 245 245)
                     , height fill
                     ]
-                    [ el
+                    [ paragraph
                         [ centerX
                         , Font.size 42
                         , padding 20
                         , Font.variant Font.smallCaps
                         ]
-                        (text "Vexillology")
+                        [ text "Two hundred nations" ]
                     , viewFlag question.correct
                     , case model.answer of
                         Just answer ->

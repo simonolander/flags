@@ -1,20 +1,29 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
+import Country exposing (Country, countries, flagImage)
+import Element exposing (column, image, layout, padding, px, width)
+import Html exposing (Html)
+import List.Nonempty as Nonempty
 
 
 ---- MODEL ----
 
 
 type alias Model =
-    {}
+    { country: Country}
+
+type alias InitArgs =
+    { countryIndex : Int
+    }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( {}, Cmd.none )
+init : InitArgs -> ( Model, Cmd Msg )
+init args =
+    let
+        country = Nonempty.get args.countryIndex countries
+    in
+    ( {country = country}, Cmd.none )
 
 
 
@@ -36,21 +45,26 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ img [ src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
-        ]
+    layout [] <|
+        column
+            [padding 20]
+            [ image
+                [width (px 100)]
+                { src = flagImage model.country,
+                 description = "A flag of a country you're supposed to guess"}
+            ]
+
 
 
 
 ---- PROGRAM ----
 
 
-main : Program () Model Msg
+main : Program InitArgs Model Msg
 main =
     Browser.element
         { view = view
-        , init = \_ -> init
+        , init = init
         , update = update
         , subscriptions = always Sub.none
         }

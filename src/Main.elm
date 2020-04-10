@@ -2,16 +2,18 @@ module Main exposing (InitArgs, Model, Msg(..), init, main, update, view)
 
 import Browser
 import Country exposing (Country, countries, defaultCountry, flagImage, similarFlags)
-import Element exposing (centerX, column, el, fill, height, image, layout, maximum, mouseOver, padding, paragraph, rgb255, rgba255, shrink, spacing, text, width)
+import Element exposing (alignBottom, centerX, column, el, fill, height, htmlAttribute, image, layout, link, maximum, mouseOver, padding, paragraph, rgb255, rgba255, shrink, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input exposing (button, labelAbove, option, radio)
 import Html exposing (Html)
+import Html.Attributes exposing (class, style)
 import List.Selection as Selection exposing (Selection)
 import Maybe.Extra
 import Random exposing (Generator)
 import Random.List
+import Version exposing (version)
 
 
 
@@ -296,6 +298,12 @@ view model =
                                 , " / "
                                 , String.fromInt model.totalAnswers
                                 ]
+                    , link
+                        [ htmlAttribute <| class "version"
+                        ]
+                        { url = "https://github.com/simonolander/flags"
+                        , label = text version
+                        }
                     ]
 
 

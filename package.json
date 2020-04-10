@@ -8,7 +8,8 @@
   "scripts": {
     "build": "yarn elm-app build",
     "test": "yarn elm-app test",
-    "clean": "rm -rf elm-stuff build"
+    "clean": "rm -rf elm-stuff build",
+    "patch": "git tag | sort -rV | head -n1 | awk -F. '{$NF++; OFS=\".\"; print $0}' | xargs -I. git tag -a . -m \"New patch version: .\" && git push && git push --tags"
   },
   "devDependencies": {
     "create-elm-app": "^4.2.5"

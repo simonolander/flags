@@ -2,7 +2,7 @@ module Main exposing (InitArgs, Model, Msg(..), init, main, update, view)
 
 import Browser
 import Country exposing (Country, countries, defaultCountry, flagImage, similarFlags)
-import Element exposing (centerX, column, el, fill, height, image, layout, maximum, mouseOver, padding, paragraph, rgb255, shrink, spacing, text, width)
+import Element exposing (centerX, column, el, fill, height, image, layout, maximum, mouseOver, padding, paragraph, rgb255, rgba255, shrink, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -182,7 +182,7 @@ view model =
                     , centerX
                     , spacing 20
                     , width (maximum 800 fill)
-                    , Background.color (rgb255 245 245 245)
+                    , Background.color (rgba255 245 245 245 0.95)
                     , height fill
                     ]
                     [ paragraph

@@ -12,7 +12,8 @@
 body {
   margin: 0;
   text-align: center;
-  background-color: #293c4b;
+  background: url("/background.jpg");
+  background-size: 100vw 100vh;
 }
 
 h1 {

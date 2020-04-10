@@ -1,0 +1,16 @@
+{
+  "name": "flags",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:simonolander/flags.git",
+  "author": "Simon Olander <simon.olander@gmail.com>",
+  "license": "GPL",
+  "scripts": {
+    "build": "yarn elm-app build",
+    "test": "yarn elm-app test",
+    "clean": "rm -rf elm-stuff build"
+  },
+  "devDependencies": {
+    "create-elm-app": "^4.2.5"
+  }
+}

@@ -20,8 +20,12 @@ echo
 
 project_name=
 prompt "project_name" "flags"
+domain_root=
+prompt "domain_root" "simonolander.com"
+domain_name=
+prompt "domain_name" "${project_name}.${domain_root}"
 bucket_name=
-prompt "bucket_name" "${project_name}.simonolander.com"
+prompt "bucket_name" "${domain_name}"
 region=
 prompt "region" "eu-west-3"
 
@@ -88,6 +92,136 @@ echo -n "Attaching policies..."
 aws iam attach-user-policy "--policy-arn=${policy_arn}" "--user-name=${user_name}"
 echo " done."
 
-echo "AWS_ACCESS_KEY_ID: ${access_key_id}"
-echo "AWS_S3_BUCKET: ${bucket_name}"
-echo "AWS_SECRET_ACCESS_KEY: ${secret_access_key}"
+echo -n "Requesting certificate..."
+certificate_region="us-east-1"
+certificate_json="$(aws acm request-certificate "--domain-name=${domain_name}" "--validation-method=DNS" "--region=${certificate_region}")"
+certificate_arn="$(echo "${certificate_json}" | jq -re .CertificateArn)"
+certificate_describe_json="$(aws acm describe-certificate "--certificate-arn=${certificate_arn}" "--region=${certificate_region}")"
+echo " done."
+echo
+echo "Visit https://www.hover.com/control_panel/domain/${domain_root}/dns and create a new record with the following information."
+echo "  TYPE: $(echo "${certificate_describe_json}" | jq -re '.Certificate.DomainValidationOptions[0].ResourceRecord.Type')"
+echo "  HOSTNAME: $(echo "${certificate_describe_json}" | jq -re '.Certificate.DomainValidationOptions[0].ResourceRecord.Name')"
+echo "  TARGET NAME: $(echo "${certificate_describe_json}" | jq -re '.Certificate.DomainValidationOptions[0].ResourceRecord.Value')"
+echo
+echo -n "Waiting for certificate to become validated..."
+aws acm wait certificate-validated "--certificate-arn=${certificate_arn}" "--region=${certificate_region}"
+echo "done."
+echo -n "Creating cloudfront distribution..."
+caller_reference="${0}"
+distribution_json="$(aws cloudfront create-distribution "--region=${certificate_region}" --distribution-config '{
+  "CallerReference": "'"${caller_reference}"'",
+  "Aliases": {
+    "Quantity": 1,
+    "Items": [
+      "'"${domain_name}"'"
+    ]
+  },
+  "DefaultRootObject": "index.html",
+  "Origins": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "Id": "S3-'"${bucket_name}"'",
+        "DomainName": "'"${bucket_name}"'.s3.amazonaws.com",
+        "OriginPath": "",
+        "CustomHeaders": {
+          "Quantity": 0
+        },
+        "S3OriginConfig": {
+          "OriginAccessIdentity": ""
+        }
+      }
+    ]
+  },
+  "OriginGroups": {
+    "Quantity": 0
+  },
+  "DefaultCacheBehavior": {
+    "TargetOriginId": "S3-'"${bucket_name}"'",
+    "ForwardedValues": {
+      "QueryString": false,
+      "Cookies": {
+        "Forward": "none"
+      },
+      "Headers": {
+        "Quantity": 0
+      },
+      "QueryStringCacheKeys": {
+        "Quantity": 0
+      }
+    },
+    "TrustedSigners": {
+      "Enabled": false,
+      "Quantity": 0
+    },
+    "ViewerProtocolPolicy": "redirect-to-https",
+    "MinTTL": 0,
+    "AllowedMethods": {
+      "Quantity": 3,
+      "Items": [
+        "HEAD",
+        "GET",
+        "OPTIONS"
+      ],
+      "CachedMethods": {
+        "Quantity": 2,
+        "Items": [
+          "HEAD",
+          "GET"
+        ]
+      }
+    },
+    "SmoothStreaming": false,
+    "DefaultTTL": 86400,
+    "MaxTTL": 31536000,
+    "Compress": false,
+    "LambdaFunctionAssociations": {
+      "Quantity": 0
+    },
+    "FieldLevelEncryptionId": ""
+  },
+  "CacheBehaviors": {
+    "Quantity": 0
+  },
+  "CustomErrorResponses": {
+    "Quantity": 0
+  },
+  "Comment": "",
+  "Logging": {
+    "Enabled": false,
+    "IncludeCookies": false,
+    "Bucket": "",
+    "Prefix": ""
+  },
+  "PriceClass": "PriceClass_100",
+  "Enabled": true,
+  "ViewerCertificate": {
+    "ACMCertificateArn": "'"${certificate_arn}"'",
+    "SSLSupportMethod": "sni-only",
+    "MinimumProtocolVersion": "TLSv1.1_2016",
+    "Certificate": "'"${certificate_arn}"'",
+    "CertificateSource": "acm"
+  },
+  "Restrictions": {
+    "GeoRestriction": {
+      "RestrictionType": "none",
+      "Quantity": 0
+    }
+  },
+  "WebACLId": "",
+  "HttpVersion": "http2",
+  "IsIPV6Enabled": true
+}')"
+distribution_domain_name="$(echo "${distribution_json}" | jq -re '.Distribution.DomainName')"
+echo " done."
+
+echo "Visit https://www.hover.com/control_panel/domain/${domain_root}/dns and create a new record with the following information."
+echo "  TYPE: CNAME"
+echo "  HOSTNAME: ${domain_name}"
+echo "  TARGET NAME: ${distribution_domain_name}"
+echo
+echo "Visit https://github.com/simonolander/${project_name}/settings/secrets and enter the following secrets."
+echo "  AWS_ACCESS_KEY_ID: ${access_key_id}"
+echo "  AWS_S3_BUCKET: ${bucket_name}"
+echo "  AWS_SECRET_ACCESS_KEY: ${secret_access_key}"

@@ -193,7 +193,7 @@ view model =
                         , padding 20
                         , Font.variant Font.smallCaps
                         ]
-                        [ text "Two hundred nations" ]
+                        [ text "Two hundred banners" ]
                     , viewFlag question.correct
                     , case model.answer of
                         Just answer ->

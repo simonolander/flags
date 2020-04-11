@@ -75,7 +75,6 @@ policy_json=$(aws iam create-policy "--policy-name=${policy_name}" --policy-docu
         "s3:PutObjectAcl"
       ],
       "Resource": [
-        "arn:aws:s3:::'"${bucket_name}"'",
         "arn:aws:s3:::'"${bucket_name}"'/*"
       ]
     }

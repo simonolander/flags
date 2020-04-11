@@ -60,7 +60,25 @@ echo " done."
 
 echo -n "Creating policies..."
 policy_name="cicd-${bucket_name}"
-policy_json=$(aws iam create-policy "--policy-name=${policy_name}" --policy-document '{ "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Action": [ "s3:DeleteObject", "s3:GetBucketLocation", "s3:GetObject", "s3:ListBucket", "s3:PutObject" ], "Resource": [ "arn:aws:s3:::'"${bucket_name}"'", "arn:aws:s3:::'"${bucket_name}"'/*" ] } ] }')
+policy_json=$(aws iam create-policy "--policy-name=${policy_name}" --policy-document '{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::'"${bucket_name}"'",
+        "arn:aws:s3:::'"${bucket_name}"'/*"
+      ]
+    }
+  ]
+}')
 policy_arn=$(echo "${policy_json}" | jq -re '.Policy.Arn')
 echo " done."
 
